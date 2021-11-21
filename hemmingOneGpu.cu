@@ -28,28 +28,23 @@ void parseNumber(unsigned int *arr, std::string number)
     }
 }
 
-void findPairs(unsigned int **arr, int n, int l)
+__global__ void findPairs(unsigned int **arr, int n, int l)
 {
-    int diff;
-    for(int comparator = 0; comparator < n - 1; comparator++)
+    int id = blockIdx.x;
+    int comp1 = id / n;
+    int comp2 = id - comp1 * n;
+    int diff = 0;
+    for(int x = 0; x < l; x++)
     {
-        for(int x = comparator + 1; x < n; x++)
+        diff += arr[comp1][x]^arr[comp2][x];
+        if(diff > 1)
         {
-            diff = 0;
-            for(int y = 0; y < l; y++)
-            {
-                diff += arr[comparator][y]^arr[x][y];
-                if(diff > 1)
-                {
-                    break;
-                }
-            }
-            if(diff <= 1)
-            {
-                std::cout<<comparator<<std::endl;
-                std::cout<<x<<std::endl;
-            }
+            break;
         }
+    }
+    if(diff <= 1)
+    {
+        printf("%d\n%d\n",comp1,comp2);
     }
 }
 
@@ -63,10 +58,11 @@ int main(int argc, char** argv)
     int taken = l / (sizeof(unsigned int) * 8);
     if(l % (sizeof(unsigned int) * 8) != 0)
         taken++;
-    unsigned int** arr = new unsigned int*[n];
+    unsigned int** arr;
+    cudaMallocManaged(&&arr, n * sizeof(unsigned int*));
     for(int x = 0 ; x < n; x++)
     {
-        arr[x] = new unsigned int[taken];
+        cudaMallocManaged(arr[x],taken);
     }
     std::string number;
     int arrPos = 0;
@@ -75,7 +71,8 @@ int main(int argc, char** argv)
         parseNumber(arr[arrPos], number);
         arrPos++;
     }
-    findPairs(arr,n,taken);
+    dim3 blockSize(n*n,1,1);
+    findPairs<<<blockSize,1>>>(arr,n,taken);
     data.close();
     for(int x = 0; x < n; x++)
     {

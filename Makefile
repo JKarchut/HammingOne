@@ -1,4 +1,4 @@
-all: hemmingOneGpu hemmingOneCpu fileGenerator verfiy
+all: hemmingOneGpu hemmingOneCpu fileGenerator verify
 
 hemmingOneCpu: hemmingOneCpu.cpp
 	g++ hemmingOneCpu.cpp -o hemmingOneCpu
@@ -6,8 +6,8 @@ hemmingOneCpu: hemmingOneCpu.cpp
 fileGenerator: fileGenerator.cpp
 	g++ fileGenerator.cpp -o fileGenerator
 
-verfiy : verfiy.cpp
-	g++ verfiy.cpp -o verfiy
+verify : verify.cpp
+	g++ verify.cpp -o verify
 
 hemmingOneGpu: hemmingOneGpu.cu
 	nvcc hemmingOneGpu.cu -o hemmingOneGpu
