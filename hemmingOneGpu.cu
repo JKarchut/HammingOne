@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
     cudaMemcpy(arr_d,arr, n * taken, cudaMemcpyHostToDevice);
     int threadCount = 1024;
-    int blockSize = (n * n) / 1024 + 1;
+    dim3 blockSize((n * n) / threadCount + 1,1);
     findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
     data.close();
     cudaFree(arr_d);
