@@ -27,7 +27,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
     }
 }
 
-void findPairs(unsigned int **arr, int n, int l)
+void findPairs(unsigned int *arr, int n, int l)
 {
     int diff;
     for(int comparator = 0; comparator < n - 1; comparator++)
@@ -37,7 +37,7 @@ void findPairs(unsigned int **arr, int n, int l)
             diff = 0;
             for(int y = 0; y < l; y++)
             {
-                diff += arr[comparator][y]^arr[x][y];
+                diff += arr[comparator * l + y]^arr[x * l + y];
                 if(diff > 1)
                 {
                     break;
@@ -63,23 +63,16 @@ int main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int** arr = new unsigned int*[n];
-    for(int x = 0 ; x < n; x++)
-    {
-        arr[x] = new unsigned int[taken];
-    }
+    unsigned int* arr = new unsigned int[n * taken];
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        parseNumber(arr[arrPos], number, bitsPerInt);
+        parseNumber(&arr[arrPos * taken], number, bitsPerInt);
         arrPos++;
     }
     findPairs(arr,n,taken);
+    std::cout<<"found";
     data.close();
-    for(int x = 0; x < n; x++)
-    {
-        delete[] arr[x];
-    }
     delete[] arr;
 }

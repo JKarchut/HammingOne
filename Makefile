@@ -13,4 +13,4 @@ hemmingOneGpu: hemmingOneGpu.cu
 	nvcc hemmingOneGpu.cu -o hemmingOneGpu
 
 clean:
-	rm fileGenerator hemmingOneCpu verfiy hemmingOneGpu
+	rm fileGenerator hemmingOneCpu verify hemmingOneGpu
