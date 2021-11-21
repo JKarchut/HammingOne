@@ -27,7 +27,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitNum)
     }
 }
 
-__global__ void findPairs(unsigned int **arr, int n, int l)
+__global__ void findPairs(unsigned int *arr, int n, int l)
 {
     int id = blockIdx.x;
     int comp1 = id / n;
@@ -58,26 +58,18 @@ int main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int** arr = new unsigned int*[n];
-    for(int x = 0 ; x < n; x++)
-    {
-        arr[x] = new unsigned int[taken];
-    }
+    unsigned int* arr = new unsigned int[n * taken];
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        parseNumber(arr[arrPos], number, bitsPerInt);
+        parseNumber(&arr[taken * arrPos], number, bitsPerInt);
         arrPos++;
     }
 
     unsigned int* arr_d;
-    cudaMalloc(&arr_d,n * sizeof(unsigned int*));
-       for(int x = 0 ; x < n; x++)
-    {
-        cudaMalloc(&arr_d[x], taken * sizeof(unsigned int));
-        cudaMemcpy(arr_d[x],arr[x], taken, cudaMemcpyHostToDevice);
-    }
+    cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
+    cudaMemcpy(arr_d,arr, n * taken, cudaMemcpyHostToDevice);
     dim3 blockSize(n*n,1,1);
     findPairs<<<blockSize,1>>>(arr_d,n,taken);
     data.close();
