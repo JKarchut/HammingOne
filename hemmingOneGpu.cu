@@ -1,9 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-void parseNumber(unsigned int *arr, std::string number)
+void parseNumber(unsigned int *arr, std::string number, int bitNum)
 {
-    int bitNum = sizeof(unsigned int) * 8;
     int bitPos = 0;
     int arrPos = 0;
     unsigned int pomValue = 0;
@@ -77,7 +76,7 @@ int main(int argc, char** argv)
        for(int x = 0 ; x < n; x++)
     {
         cudaMalloc(&arr_d[x], taken * sizeof(unsigned int));
-        cudaMemcpy(arr_d[x],arr[x],taken);
+        cudaMemcpy(arr_d[x],arr[x], taken, cudaMemcpyHostToDevice);
     }
     dim3 blockSize(n*n,1,1);
     findPairs<<<blockSize,1>>>(arr_d,n,taken);
