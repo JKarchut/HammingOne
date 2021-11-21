@@ -31,21 +31,25 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x ;
     if (id >= n * n) return;
-    int comp1 = id / n;
-    int comp2 = id - comp1 * n;
-    int diff = 0;
-    for(int x = 0; x < l; x++)
+    int diff;
+    for(int x = 0; x < n; x++)
     {
-        diff += arr[comp1 * n + x]^arr[comp2 * n +x];    
-        if(diff > 1)
+        if(x == id) continue;
+        diff = 0;
+        for(int y = 0; y < l; y++)
         {
-            break;
+            diff += arr[id * n + x]^arr[x * n +x];    
+            if(diff > 1)
+            {
+                break;
+            }  
+        }
+        if(diff <= 1)
+        {
+            printf("%d\n%d\n",id,x);
         }
     }
-    if(diff <= 1)
-    {
-        printf("%d\n%d\n",comp1,comp2);
-    }
+    
 }
 
 int main(int argc, char** argv)
@@ -72,7 +76,7 @@ int main(int argc, char** argv)
     cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
     cudaMemcpy(arr_d,arr, n * taken, cudaMemcpyHostToDevice);
     int threadCount = 1024;
-    dim3 blockSize((n * n) / threadCount + 1,1);
+    int blockSize = n / threadCount + 1;
     findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
     data.close();
     cudaFree(arr_d);
