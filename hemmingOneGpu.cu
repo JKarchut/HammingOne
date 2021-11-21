@@ -29,7 +29,8 @@ void parseNumber(unsigned int *arr, std::string number, int bitNum)
 
 __global__ void findPairs(unsigned int *arr, int n, int l)
 {
-    int id = blockIdx.x;
+    int id = blockIdx.x * blockDim.x + threadIdx.x ;
+    if (id >= n * n) return;
     int comp1 = id / n;
     int comp2 = id - comp1 * n;
     int diff = 0;
@@ -70,8 +71,9 @@ int main(int argc, char** argv)
     unsigned int* arr_d;
     cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
     cudaMemcpy(arr_d,arr, n * taken, cudaMemcpyHostToDevice);
-    dim3 blockSize(n*n,1,1);
-    findPairs<<<blockSize,1>>>(arr_d,n,taken);
+    int threadCount = 1024;
+    int blockSize = (n * n) / 1024 + 1;
+    findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
     data.close();
     cudaFree(arr_d);
     delete[] arr;
