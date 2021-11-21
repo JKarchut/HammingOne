@@ -59,10 +59,10 @@ int main(int argc, char** argv)
     if(l % (sizeof(unsigned int) * 8) != 0)
         taken++;
     unsigned int** arr;
-    cudaMallocManaged(&&arr, n * sizeof(unsigned int*));
+    cudaMallocManaged(&arr, n * sizeof(unsigned int*));
     for(int x = 0 ; x < n; x++)
     {
-        cudaMallocManaged(arr[x],taken);
+        cudaMallocManaged(&arr[x],taken);
     }
     std::string number;
     int arrPos = 0;
