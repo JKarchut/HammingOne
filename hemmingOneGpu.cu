@@ -40,7 +40,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            diff += arr[id * n + x]^arr[x * n +x];    
+            diff += arr[id * l + x]^arr[x * l +x];    
             if(diff > 1)
             {
                 break;
