@@ -60,10 +60,13 @@ int main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
+    int taken = l / (sizeof(unsigned int) * 8);
+    if(l % (sizeof(unsigned int) * 8) != 0)
+        taken++;
     unsigned int** arr = new unsigned int*[n];
     for(int x = 0 ; x < n; x++)
     {
-        arr[x] = new unsigned int[l];
+        arr[x] = new unsigned int[taken];
     }
     std::string number;
     int arrPos = 0;
@@ -72,9 +75,6 @@ int main(int argc, char** argv)
         parseNumber(arr[arrPos], number);
         arrPos++;
     }
-    int taken = l / (sizeof(unsigned int) * 8);
-    if(l % (sizeof(unsigned int) * 8) != 0)
-        taken++;
     findPairs(arr,n,taken);
     data.close();
     for(int x = 0; x < n; x++)

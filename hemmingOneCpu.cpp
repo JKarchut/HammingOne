@@ -1,15 +1,14 @@
 #include <iostream>
 #include <fstream>
 
-void parseNumber(unsigned int *arr, std::string number)
+void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
-    int bitNum = sizeof(unsigned int) * 8;
     int bitPos = 0;
     int arrPos = 0;
     unsigned int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
-        if(bitNum > bitPos)
+        if(bitsPerInt > bitPos)
         {
             pomValue += (unsigned int)(number[x] - '0') << bitPos;
             bitPos++;
@@ -60,21 +59,22 @@ int main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
+    int bitsPerInt =  sizeof(unsigned int) * 8;
+    int taken = l / bitsPerInt;
+    if(l % bitsPerInt != 0)
+        taken++;
     unsigned int** arr = new unsigned int*[n];
     for(int x = 0 ; x < n; x++)
     {
-        arr[x] = new unsigned int[l];
+        arr[x] = new unsigned int[taken];
     }
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        parseNumber(arr[arrPos], number);
+        parseNumber(arr[arrPos], number, bitsPerInt);
         arrPos++;
     }
-    int taken = l / (sizeof(unsigned int) * 8);
-    if(l % (sizeof(unsigned int) * 8) != 0)
-        taken++;
     findPairs(arr,n,taken);
     data.close();
     for(int x = 0; x < n; x++)

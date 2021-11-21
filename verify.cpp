@@ -20,6 +20,7 @@ int parse_input(char * file, std::vector<std::pair<int, int>>& data_vector) {
         data_vector.push_back(create_pair(a, b));
     }
     sort(data_vector.begin(), data_vector.end());
+    return 0;
 }
 
 void check_if_equal(std::vector<std::pair<int, int>>& correct_output, std::vector<std::pair<int, int>>& solution_output) {
