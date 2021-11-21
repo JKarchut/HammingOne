@@ -8,7 +8,7 @@ std::pair<int, int> create_pair(int a, int b) {
     else return std::make_pair(b, a);
 }
 
-int parse_input(char * file, std::vector<std::pair<int, int>>& data_vector) {
+int parse_input(char * file, std::vector<std::pair<int, int> >& data_vector) {
     int a, b;
     std::ifstream input(file);
 
@@ -23,7 +23,7 @@ int parse_input(char * file, std::vector<std::pair<int, int>>& data_vector) {
     return 0;
 }
 
-void check_if_equal(std::vector<std::pair<int, int>>& correct_output, std::vector<std::pair<int, int>>& solution_output) {
+void check_if_equal(std::vector<std::pair<int, int> >& correct_output, std::vector<std::pair<int, int> >& solution_output) {
     if ((int)correct_output.size() != (int)solution_output.size()) {
         std::cout << "Invalid Solution" << std::endl;
         return;
@@ -41,7 +41,7 @@ void check_if_equal(std::vector<std::pair<int, int>>& correct_output, std::vecto
 int main(int argc, char ** argv) {
     if (argc < 3)
         return -1;
-    std::vector<std::pair<int, int>> output1, output2;
+    std::vector<std::pair<int, int> > output1, output2;
 
     if(-1 == parse_input(argv[1], output1)) return -1;
     if(-1 == parse_input(argv[2], output2)) return -1;
