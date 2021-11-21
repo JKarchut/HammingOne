@@ -25,7 +25,7 @@ void parseNumber(unsigned int *arr, std::string number)
 
 int main(int argc, char** argv)
 {
-    std::ifstream data(argv[0]);
+    std::ifstream data(argv[1]);
     int n;
     int l;
     data >> n;
