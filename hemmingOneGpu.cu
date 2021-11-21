@@ -80,7 +80,7 @@ int main(int argc, char** argv)
         cudaMemcpy(arr_d[x],arr[x],taken);
     }
     dim3 blockSize(n*n,1,1);
-    findPairs<<<blockSize,1>>>(arr,n,taken);
+    findPairs<<<blockSize,1>>>(arr_d,n,taken);
     data.close();
     for(int x = 0; x < n; x++)
     {
