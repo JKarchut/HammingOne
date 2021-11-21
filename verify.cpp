@@ -28,8 +28,8 @@ void check_if_equal(std::vector<std::pair<int, int> >& correct_output, std::vect
         std::cout << "Invalid Solution" << std::endl;
         return;
     }
-    int vectors_size = (int)correct_output.size();
-    for (int i = 0; i < vectors_size; i++) {
+    size_t vectors_size = (int)correct_output.size();
+    for (size_t i = 0; i < vectors_size; i++) {
         if (correct_output[i].first != solution_output[i].first || correct_output[i].second != solution_output[i].second) {
             std::cout << "Invalid Solution" << std::endl;
             return;

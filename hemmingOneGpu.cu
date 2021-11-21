@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 
+#define int long long
+
 void parseNumber(unsigned int *arr, std::string number, int bitNum)
 {
     int bitPos = 0;
@@ -52,7 +54,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
     
 }
 
-int main(int argc, char** argv)
+int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
     int n;
