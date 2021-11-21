@@ -35,7 +35,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
     int diff = 0;
     for(int x = 0; x < l; x++)
     {
-        diff += arr[comp1 * n + x^arr[comp2 * n +x];    
+        diff += arr[comp1 * n + x]^arr[comp2 * n +x];    
         if(diff > 1)
         {
             break;
