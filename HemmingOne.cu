@@ -25,12 +25,16 @@ void parseNumber(unsigned int *arr, std::string number)
 
 int main(int argc, char** argv)
 {
-    std::ifstream data(argv[0], ios::out);
+    std::ifstream data(argv[0]);
     int n;
     int l;
     data >> n;
     data >> l;
-    unsigned int** arr = new unsigned int[n][l];
+    unsigned int** arr = new unsigned int*[n];
+    for(int x = 0 ; x < n; x++)
+    {
+        arr[x] = new unsigned int[l];
+    }
     std::string number;
     int arrPos = 0;
     while(data >> number)
@@ -38,9 +42,16 @@ int main(int argc, char** argv)
         parseNumber(arr[arrPos], number);
         arrPos++;
     }
-
-
-    ifstream.close();
+    int taken = l / (sizeof(unsigned int) * 8);
+    for(int x =0 ; x<n; x++)
+    {
+        for (int y = 0; y < taken; y++)
+        {
+            std::cout << arr[x][y] << ' ';
+        }
+        std::cout << std::endl;
+    }
+    data.close();
     for(int x = 0; x < n; x++)
     {
         delete[] arr[x];
