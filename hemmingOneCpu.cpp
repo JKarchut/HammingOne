@@ -11,7 +11,7 @@ void parseNumber(unsigned int *arr, std::string number)
     {
         if(bitNum > bitPos)
         {
-            pomValue+= (number[x] - '0')<<bitPos;
+            pomValue += (unsigned int)(number[x] - '0') << bitPos;
             bitPos++;
         }
         else
@@ -19,6 +19,36 @@ void parseNumber(unsigned int *arr, std::string number)
             arr[arrPos] = pomValue;
             arrPos++;
             bitPos = 0;
+            pomValue = 0;
+        }
+    }
+    if(bitPos != 0)
+    {
+        arr[arrPos] = pomValue;
+    }
+}
+
+void findPairs(unsigned int **arr, int n, int l)
+{
+    int diff;
+    for(int comparator = 0; comparator < n - 1; comparator++)
+    {
+        for(int x = comparator + 1; x < n; x++)
+        {
+            diff = 0;
+            for(int y = 0; y < l; y++)
+            {
+                diff += arr[comparator][y]^arr[x][y];
+                if(diff > 1)
+                {
+                    break;
+                }
+            }
+            if(diff <= 1)
+            {
+                std::cout<<comparator<<std::endl;
+                std::cout<<x<<std::endl;
+            }
         }
     }
 }
@@ -43,14 +73,9 @@ int main(int argc, char** argv)
         arrPos++;
     }
     int taken = l / (sizeof(unsigned int) * 8);
-    for(int x =0 ; x<n; x++)
-    {
-        for (int y = 0; y < taken; y++)
-        {
-            std::cout << arr[x][y] << ' ';
-        }
-        std::cout << std::endl;
-    }
+    if(l % (sizeof(unsigned int) * 8) != 0)
+        taken++;
+    findPairs(arr,n,taken);
     data.close();
     for(int x = 0; x < n; x++)
     {
