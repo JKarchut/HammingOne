@@ -71,8 +71,8 @@ int main(int argc, char** argv)
         arrPos++;
     }
 
-    unsigned int** arr_d;
-    cudaMalloc(&arr_d,n * sizeof(unsigned int));
+    unsigned int* arr_d;
+    cudaMalloc(&arr_d,n * sizeof(unsigned int*));
        for(int x = 0 ; x < n; x++)
     {
         cudaMalloc(&arr_d[x], taken * sizeof(unsigned int));
