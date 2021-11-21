@@ -35,7 +35,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
     int diff = 0;
     for(int x = 0; x < l; x++)
     {
-        diff += arr[comp1][x]^arr[comp2][x];
+        diff += arr[comp1 * n + x^arr[comp2 * n +x];    
         if(diff > 1)
         {
             break;
@@ -73,9 +73,6 @@ int main(int argc, char** argv)
     dim3 blockSize(n*n,1,1);
     findPairs<<<blockSize,1>>>(arr_d,n,taken);
     data.close();
-    for(int x = 0; x < n; x++)
-    {
-        delete[] arr[x];
-    }
+    cudaFree(arr_d);
     delete[] arr;
 }
