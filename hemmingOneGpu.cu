@@ -31,8 +31,8 @@ void parseNumber(unsigned int *arr, std::string number, int bitNum)
 
 __global__ void findPairs(unsigned int *arr, int n, int l)
 {
-    int id = blockIdx.x * blockDim.x + threadIdx.x ;
-    if (id >= n * n) return;
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id >= n) return;
     int diff;
     for(int x = 0; x < n; x++)
     {
@@ -40,7 +40,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            diff += arr[id * l + x]^arr[x * l +x];    
+            diff += arr[id * l + y]^arr[x * l + y];    
             if(diff > 1)
             {
                 break;
