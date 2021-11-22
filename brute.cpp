@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <cstring>
 void parseNumber(unsigned int *arr, std::string number)
 {
     for(int x = 0; x < number.length();x++)
@@ -19,10 +19,10 @@ void findPairs(unsigned int *arr, int n, int l)
             diff = 0;
             for(int y = 0; y < l; y++)
             {
-                if(arr[comparator * l + y] != arr[x * l + y])
+                if(arr[x * l + y] != arr[comparator * l + y])
                     diff++;
                 if(diff > 1)
-                    break;
+                    return;
             }
             if(diff == 1)
             {
@@ -39,19 +39,16 @@ int32_t main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
-    int bitsPerInt =  sizeof(unsigned int) * 8 - 1;
-    int taken = l / bitsPerInt;
-    if(l % bitsPerInt != 0)
-        taken++;
-    unsigned int* arr = new unsigned int[n * taken];
+    unsigned int* arr = new unsigned int[n * l];
+    memset(arr,0,n * l * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        parseNumber(&arr[arrPos * taken], number, bitsPerInt);
+        parseNumber(&arr[arrPos * l], number);
         arrPos++;
     }
-    findPairs(arr,n,taken);
+    findPairs(arr,n,l);
     data.close();
     delete[] arr;
 }
