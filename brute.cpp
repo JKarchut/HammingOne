@@ -1,29 +1,11 @@
 #include <iostream>
 #include <fstream>
 
-void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
+void parseNumber(unsigned int *arr, std::string number)
 {
-    int bitPos = 0;
-    int arrPos = 0;
-    unsigned int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
-        if(bitsPerInt > bitPos)
-        {
-            pomValue += (unsigned int)(number[x] - '0') << bitPos;
-            bitPos++;
-        }
-        else
-        {
-            arr[arrPos] = pomValue;
-            arrPos++;
-            bitPos = 0;
-            pomValue = 0;
-        }
-    }
-    if(bitPos != 0)
-    {
-        arr[arrPos] = pomValue;
+        arr[x] = (number[x] - '0');
     }
 }
 
@@ -37,11 +19,8 @@ void findPairs(unsigned int *arr, int n, int l)
             diff = 0;
             for(int y = 0; y < l; y++)
             {
-                pom = (arr[comparator * l + y]^arr[x * l + y]);
-                if(pom > 0 && (pom & (pom - 1)) == 0)
+                if(arr[comparator * l + y] != arr[x * l + y])
                     diff++;
-                else if(pom > 0)
-                    diff = 2;
                 if(diff > 1)
                     break;
             }
@@ -65,7 +44,6 @@ int32_t main(int argc, char** argv)
     if(l % bitsPerInt != 0)
         taken++;
     unsigned int* arr = new unsigned int[n * taken];
-    memset(arr,0,taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
     while(data >> number)

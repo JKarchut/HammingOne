@@ -66,6 +66,7 @@ int32_t main(int argc, char** argv)
     if(l % bitsPerInt != 0)
         taken++;
     unsigned int* arr = new unsigned int[n * taken];
+    memset(arr,0,taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
