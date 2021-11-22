@@ -33,18 +33,20 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id >= n) return;
-    int diff;
-    for(int x = 0; x < n; x++)
+    int diff, pom;
+    for(int x = id + 1; x < n; x++)
     {
-        if(x == id) continue;
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            diff += arr[id * l + y]^arr[x * l + y];    
-            if(diff > 1)
-            {
+            pom = arr[id * l + y]^arr[x * l + y];    
+            if(pom > 0 && (pom & (pom - 1) == 0))
+                diff++;
+            else if(pom > 0)
                 break;
-            }  
+
+            if(diff > 1)
+                break;
         }
         if(diff <= 1)
         {

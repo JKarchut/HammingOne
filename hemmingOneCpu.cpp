@@ -30,7 +30,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 
 void findPairs(unsigned int *arr, int n, int l)
 {
-    int diff;
+    int diff, pom;
     for(int comparator = 0; comparator < n - 1; comparator++)
     {
         for(int x = comparator + 1; x < n; x++)
@@ -38,11 +38,13 @@ void findPairs(unsigned int *arr, int n, int l)
             diff = 0;
             for(int y = 0; y < l; y++)
             {
-                diff += arr[comparator * l + y]^arr[x * l + y];
-                if(diff > 1)
-                {
+                pom = arr[comparator * l + y]^arr[x * l + y];
+                if(pom > 0 && (pom & (pom - 1)) == 0)
+                    diff++;
+                else if(diff > 0)
                     break;
-                }
+                if(diff > 1)
+                    break;
             }
             if(diff <= 1)
             {
