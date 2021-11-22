@@ -1,16 +1,16 @@
 #include <iostream>
 #include <fstream>
 
-void parseNumber(unsigned int *arr, std::string number, int bitNum)
+void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
     int arrPos = 0;
     unsigned int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
-        if(bitNum > bitPos)
+        if(bitsPerInt > bitPos)
         {
-            pomValue += (unsigned int)(number[x] - '0') << x;
+            pomValue += (unsigned int)(number[x] - '0') << bitPos;
             bitPos++;
         }
         else
@@ -61,7 +61,7 @@ int32_t main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
-    int bitsPerInt =  sizeof(unsigned int) * 8;
+    int bitsPerInt =  sizeof(unsigned int) * 8 - 1;
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
