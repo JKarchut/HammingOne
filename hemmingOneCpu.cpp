@@ -45,10 +45,10 @@ void findPairs(unsigned int *arr, int n, int l)
                 if(diff > 1)
                     break;
             }
-            if(diff <= 1)
+            if(diff == 1)
             {
-                std::cout<<arr[comparator]<<std::endl;
-                std::cout<<arr[x]<<std::endl;
+                std::cout<<comparator<<std::endl;
+                std::cout<<x<<std::endl;
             }
         }
     }

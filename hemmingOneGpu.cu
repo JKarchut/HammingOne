@@ -12,7 +12,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitNum)
     {
         if(bitNum > bitPos)
         {
-            pomValue += (unsigned int)(number[x] - '0') << bitPos;
+            pomValue += (unsigned int)(number[x] - '0') << x;
             bitPos++;
         }
         else
@@ -31,7 +31,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitNum)
 
 __global__ void findPairs(unsigned int *arr, int n, int l)
 {
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    int id = blockIdx.x * 1024 + threadIdx.x;
     if (id >= n) return;
     int diff, pom;
     for(int x = id + 1; x < n; x++)
@@ -40,7 +40,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
         for(int y = 0; y < l; y++)
         {
             pom = arr[id * l + y]^arr[x * l + y];    
-            if(pom > 0 && (pom & (pom - 1) == 0))
+            if(pom > 0 && (pom & (pom - 1)) == 0)
                 diff++;
             else if(pom > 0)
                 diff = 2;
@@ -48,7 +48,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
             if(diff > 1)
                 break;
         }
-        if(diff <= 1)
+        if(diff == 1)
         {
             printf("%d\n%d\n",id,x);
         }
