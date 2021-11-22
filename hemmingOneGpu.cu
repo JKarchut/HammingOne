@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 
-#define int long long
-
 void parseNumber(unsigned int *arr, std::string number, int bitNum)
 {
     int bitPos = 0;
