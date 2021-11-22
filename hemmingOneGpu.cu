@@ -55,7 +55,7 @@ __global__ void findPairs(  int *arr, int n, int l)
     }
     
 }
-int_ceil(double variable) {
+int _ceil(double variable) {
 
 int new_variable = (int)variable;
 
