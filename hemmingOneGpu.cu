@@ -9,7 +9,7 @@ void parseNumber(  int *arr, std::string number, int bitsPerInt)
       int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
-        if(bitsPerInt > bitPos)
+        if(bitPos < bitsPerInt)
         {
             pomValue = pomValue * 2 + ((  int)(number[x] - '0'));
             bitPos++;
@@ -39,10 +39,11 @@ __global__ void findPairs(  int *arr, int n, int l)
         for(int y = 0; y < l; y++)
         {
             pom = (arr[id * l + y]^arr[x * l + y]);    
-            if(pom > 0 && (pom & (pom - 1)) == 0)
-                diff++;
-            else if(pom > 0)
-                diff = 2;
+            while(pom != 0)
+            {
+                diff += (pom & 1);
+                pom = (pom >> 1);
+            }
 
             if(diff > 1)
                 break;
@@ -76,7 +77,7 @@ int32_t main(int argc, char** argv)
         arrPos++;
     }
 
-      int* arr_d;
+    int* arr_d;
     cudaMalloc(&arr_d, n * taken * sizeof(  int));
     cudaMemcpy(arr_d,arr, n * taken * sizeof(  int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
