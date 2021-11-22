@@ -12,7 +12,7 @@ void parseNumber(unsigned int *arr, std::string number)
 void findPairs(unsigned int *arr, int n, int l)
 {
     int diff, pom;
-    for(int comparator = 0; comparator < n - 1; comparator++)
+    for(int comparator = 0; comparator < n ; comparator++)
     {
         for(int x = comparator + 1; x < n; x++)
         {
@@ -22,7 +22,7 @@ void findPairs(unsigned int *arr, int n, int l)
                 if(arr[x * l + y] != arr[comparator * l + y])
                     diff++;
                 if(diff > 1)
-                    return;
+                    break;
             }
             if(diff == 1)
             {
@@ -32,7 +32,7 @@ void findPairs(unsigned int *arr, int n, int l)
     }
 }
 
-int32_t main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
     int n;
@@ -43,6 +43,7 @@ int32_t main(int argc, char** argv)
     memset(arr,0,n * l * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
+
     while(data >> number)
     {
         parseNumber(&arr[arrPos * l], number);
