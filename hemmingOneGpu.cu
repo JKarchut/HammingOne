@@ -10,7 +10,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
     {
         if(bitsPerInt > bitPos)
         {
-            pomValue += (unsigned int)(number[x] - '0') << bitPos;
+            pomValue += ((unsigned int)(number[x] - '0') << bitPos);
             bitPos++;
         }
         else
