@@ -43,7 +43,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
             if(pom > 0 && (pom & (pom - 1) == 0))
                 diff++;
             else if(pom > 0)
-                break;
+                diff = 2;
 
             if(diff > 1)
                 break;

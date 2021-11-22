@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#define int long long
 
 void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
@@ -41,15 +40,15 @@ void findPairs(unsigned int *arr, int n, int l)
                 pom = arr[comparator * l + y]^arr[x * l + y];
                 if(pom > 0 && (pom & (pom - 1)) == 0)
                     diff++;
-                else if(diff > 0)
-                    break;
+                else if(pom > 0)
+                    diff = 2;
                 if(diff > 1)
                     break;
             }
             if(diff <= 1)
             {
-                std::cout<<comparator<<std::endl;
-                std::cout<<x<<std::endl;
+                std::cout<<arr[comparator]<<std::endl;
+                std::cout<<arr[x]<<std::endl;
             }
         }
     }
