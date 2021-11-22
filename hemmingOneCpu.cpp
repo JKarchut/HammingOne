@@ -37,7 +37,7 @@ void findPairs(unsigned int *arr, int n, int l)
             diff = 0;
             for(int y = 0; y < l; y++)
             {
-                pom = arr[comparator * l + y]^arr[x * l + y];
+                pom = (arr[comparator * l + y]^arr[x * l + y]);
                 if(pom > 0 && (pom & (pom - 1)) == 0)
                     diff++;
                 else if(pom > 0)
@@ -73,7 +73,6 @@ int32_t main(int argc, char** argv)
         arrPos++;
     }
     findPairs(arr,n,taken);
-    std::cout<<"found";
     data.close();
     delete[] arr;
 }

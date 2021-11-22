@@ -35,9 +35,9 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
     for(int x = id + 1; x < n; x++)
     {
         diff = 0;
-        for(int y = 0; y < l; y++)
+        for(int y = 0; y < l; y++)t
         {
-            pom = arr[id * l + y]^arr[x * l + y];    
+            pom = (arr[id * l + y]^arr[x * l + y]);    
             if(pom > 0 && (pom & (pom - 1)) == 0)
                 diff++;
             else if(pom > 0)
@@ -76,7 +76,7 @@ int32_t main(int argc, char** argv)
 
     unsigned int* arr_d;
     cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
-    cudaMemcpy(arr_d,arr, n * taken, cudaMemcpyHostToDevice);
+    cudaMemcpy(arr_d,arr, n * taken * sizeof(unsigned int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
     int blockSize = n / threadCount + 1;
     findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
