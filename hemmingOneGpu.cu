@@ -1,16 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
+ 
+void parseNumber(  int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
     int arrPos = 0;
-    unsigned int pomValue = 0;
+      int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
         if(bitsPerInt > bitPos)
         {
-            pomValue += ((unsigned int)(number[x] - '0') << bitPos);
+            pomValue = pomValue * 2 + ((  int)(number[x] - '0'));
             bitPos++;
         }
         else
@@ -27,7 +28,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
     }
 }
 
-__global__ void findPairs(unsigned int *arr, int n, int l)
+__global__ void findPairs(  int *arr, int n, int l)
 {
     int id = blockIdx.x * 1024 + threadIdx.x;
     if (id >= n) return;
@@ -65,8 +66,8 @@ int32_t main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int* arr = new unsigned int[n * taken];
-    memset(arr,0,taken * n * sizeof(unsigned int));
+      int* arr = new   int[n * taken];
+    memset(arr,0,taken * n * sizeof(  int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
@@ -75,9 +76,9 @@ int32_t main(int argc, char** argv)
         arrPos++;
     }
 
-    unsigned int* arr_d;
-    cudaMalloc(&arr_d, n * taken * sizeof(unsigned int));
-    cudaMemcpy(arr_d,arr, n * taken * sizeof(unsigned int), cudaMemcpyHostToDevice);
+      int* arr_d;
+    cudaMalloc(&arr_d, n * taken * sizeof(  int));
+    cudaMemcpy(arr_d,arr, n * taken * sizeof(  int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
     int blockSize = n / threadCount + 1;
     findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
