@@ -61,7 +61,7 @@ int32_t main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
-    int bitsPerInt =  sizeof(unsigned int) * 8 - 1;
+    int bitsPerInt =  15;
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
