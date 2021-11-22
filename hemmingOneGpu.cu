@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <cstring>
 void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
