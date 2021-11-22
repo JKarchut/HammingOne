@@ -48,7 +48,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
         }
         if(diff == 1)
         {
-            printf("%d\n%d\n",id,x);
+            printf("%d %d\n",id,x);
         }
     }
     

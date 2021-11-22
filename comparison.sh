@@ -1,6 +1,6 @@
 make
 echo "Testing for 100000 vectors of 1000 length"
-./fileGenerator 100000 1000 test.txt
+./fileGenerator 1000 10 test.txt
 
 echo "CPU"
 CPU_START_TIME=$(date +%s%N | cut -b1-13)

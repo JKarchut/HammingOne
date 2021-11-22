@@ -47,8 +47,7 @@ void findPairs(unsigned int *arr, int n, int l)
             }
             if(diff == 1)
             {
-                std::cout<<comparator<<std::endl;
-                std::cout<<x<<std::endl;
+                std::cout<<comparator<<' '<<x<<std::endl;
             }
         }
     }
