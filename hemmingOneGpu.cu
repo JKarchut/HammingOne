@@ -31,7 +31,6 @@ void parseNumber(  int *arr, std::string number, int bitsPerInt)
 __global__ void findPairs(  int *arr, int n, int l)
 {
     int id = blockIdx.x * 1024 + threadIdx.x;
-    if (id >= n) return;
     int diff, pom;
     for(int x = id + 1; x < n; x++)
     {
@@ -83,6 +82,7 @@ int taken = _ceil((double)l / bitsPerInt);
     int arrPos = 0;
     while(data >> number)
     {
+        std::cout << number << std::endl;
         parseNumber(&arr[taken * arrPos], number, bitsPerInt);
         arrPos++;
     }
