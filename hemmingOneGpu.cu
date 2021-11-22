@@ -55,6 +55,15 @@ __global__ void findPairs(  int *arr, int n, int l)
     }
     
 }
+int_ceil(double variable) {
+
+int new_variable = (int)variable;
+
+if ((double)new_variable == variable) return new_variable;
+
+else return new_variable + 1;
+
+}
 
 int32_t main(int argc, char** argv)
 {
@@ -64,9 +73,10 @@ int32_t main(int argc, char** argv)
     data >> n;
     data >> l;
     int bitsPerInt =  15;
-    int taken = l / bitsPerInt;
-    if(l % bitsPerInt != 0)
-        taken++;
+    // int taken = l / bitsPerInt;
+    // if(l % bitsPerInt != 0)
+    //     taken++;
+int taken = _ceil((double)l / bitsPerInt);
       int* arr = new   int[n * taken];
     memset(arr,0,taken * n * sizeof(  int));
     std::string number;
@@ -81,8 +91,9 @@ int32_t main(int argc, char** argv)
     cudaMalloc(&arr_d, n * taken * sizeof(  int));
     cudaMemcpy(arr_d,arr, n * taken * sizeof(  int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
-    int blockSize = n / threadCount + 1;
-    findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
+    // int blockSize = n / threadCount + 1;
+    int blocks = _ceil((double)n / threadCount);
+    findPairs<<<blocks,threadCount>>>(arr_d,n,taken);
     data.close();
     cudaFree(arr_d);
     delete[] arr;
