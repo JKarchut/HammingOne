@@ -75,6 +75,7 @@ int main(int argc, char** argv)
     while(data >> number)
     {
         parseNumber(&arr[taken * arrPos], number, bitsPerInt);
+        printf("%d\n",arr[taken * arrPos]);
         arrPos++;
     }
     printf("%d %d\n",n,taken);
