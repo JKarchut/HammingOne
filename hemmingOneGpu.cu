@@ -84,7 +84,7 @@ int main(int argc, char** argv)
     int threadCount = 1024;
     int blockSize = (n / threadCount) + 1;
     findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
-    cudaDeviceSynchronize():
+    cudaDeviceSynchronize();
     data.close();
     cudaFree(arr_d);
     delete[] arr;
