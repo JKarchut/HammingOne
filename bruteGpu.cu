@@ -55,7 +55,7 @@ int32_t main(int argc, char** argv)
     cudaMemcpy(arr_d,arr, n * l * sizeof(unsigned int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
     int blockSize = n / threadCount + 1;
-    findPairs<<<blocks,threadCount>>>(arr_d,n,l);
+    findPairs<<<blockSize,threadCount>>>(arr_d,n,l);
     data.close();
     cudaFree(arr_d);
     delete[] arr;

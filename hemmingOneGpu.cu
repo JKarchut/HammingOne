@@ -6,12 +6,12 @@ void parseNumber(  int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
     int arrPos = 0;
-      int pomValue = 0;
+    int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
         if(bitPos < bitsPerInt)
         {
-            pomValue = pomValue * 2 + ((  int)(number[x] - '0'));
+            pomValue = (pomValue * 2) + ((int)(number[x] - '0'));
             bitPos++;
         }
         else
@@ -42,8 +42,9 @@ __global__ void findPairs(  int *arr, int n, int l)
             {
                 diff += (pom & 1);
                 pom = (pom >> 1);
+                if(diff > 1)
+                    break;
             }
-
             if(diff > 1)
                 break;
         }
@@ -54,17 +55,8 @@ __global__ void findPairs(  int *arr, int n, int l)
     }
     
 }
-int _ceil(double variable) {
 
-int new_variable = (int)variable;
-
-if ((double)new_variable == variable) return new_variable;
-
-else return new_variable + 1;
-
-}
-
-int32_t main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
     int n;
@@ -72,28 +64,26 @@ int32_t main(int argc, char** argv)
     data >> n;
     data >> l;
     int bitsPerInt =  15;
-    // int taken = l / bitsPerInt;
-    // if(l % bitsPerInt != 0)
-    //     taken++;
-int taken = _ceil((double)l / bitsPerInt);
-      int* arr = new   int[n * taken];
-    memset(arr,0,taken * n * sizeof(  int));
+    int taken = l / bitsPerInt;
+    if(l % bitsPerInt != 0)
+        taken++;
+    int* arr = new   int[n * taken];
+    memset(arr,0,taken * n * sizeof(int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        std::cout << number << std::endl;
         parseNumber(&arr[taken * arrPos], number, bitsPerInt);
         arrPos++;
     }
 
     int* arr_d;
-    cudaMalloc(&arr_d, n * taken * sizeof(  int));
-    cudaMemcpy(arr_d,arr, n * taken * sizeof(  int), cudaMemcpyHostToDevice);
+    cudaMalloc(&arr_d, n * taken * sizeof(int));
+    cudaMemcpy(arr_d,arr, n * taken * sizeof(int), cudaMemcpyHostToDevice);
     int threadCount = 1024;
-    // int blockSize = n / threadCount + 1;
-    int blocks = _ceil((double)n / threadCount);
-    findPairs<<<blocks,threadCount>>>(arr_d,n,taken);
+    int blockSize = (n / threadCount) + 1;
+    findPairs<<<blockSize,threadCount>>>(arr_d,n,taken);
+    cudaDeviceSynchronize():
     data.close();
     cudaFree(arr_d);
     delete[] arr;
