@@ -49,11 +49,17 @@ __global__ void findPairs(unsigned int *arr, unsigned int* ans, int n, int l)
         {
             pom = (arr[index * l + y]^arr[x * l + y]);
             if(pom > 0 && (pom & (pom - 1)) == 0)
+            {
                 diff++;
+            }
             else if(pom > 0)
+            {
                 diff = 2;
+            }
             if(diff > 1)
+            {
                 break;
+            }
         }
         if(diff == 1)
         {
@@ -86,7 +92,7 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
-    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * (n + 1)));
+    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, 1e15));
     findPairs<<<blockCount,threadCount>>>(arr, ans,n,taken);
     gpuErrchk( cudaPeekAtLastError() );
     gpuErrchk( cudaDeviceSynchronize() );
