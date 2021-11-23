@@ -12,16 +12,16 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
    }
 }
 
-void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
+void parseNumber(int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
     int arrPos = 0;
-    unsigned int pomValue = 0;
+    int pomValue = 0;
     for(int x = 0; x < number.length();x++)
     {
         if(bitsPerInt > bitPos)
         {
-            pomValue += (unsigned int)(number[x] - '0') << bitPos;
+            pomValue += (int)(number[x] - '0') << bitPos;
             bitPos++;
         }
         else
@@ -38,7 +38,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
     }
 }
 
-__global__ void findPairs(unsigned int *arr, unsigned int* ans, int n, int l)
+__global__ void findPairs(int *arr, int* ans, int n, int l)
 {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
@@ -48,7 +48,7 @@ __global__ void findPairs(unsigned int *arr, unsigned int* ans, int n, int l)
         for(int y = 0; y < l; y++)
         {
             pom = (arr[index * l + y]^arr[x * l + y]);
-            if(pom > 0 && (pom & (pom - 1)) == 0)
+            if(pom != 0 && (pom & (pom - 1)) == 0)
             {
                 diff++;
             }
@@ -75,14 +75,14 @@ int32_t main(int argc, char** argv)
     int l;
     data >> n;
     data >> l;
-    int bitsPerInt =  sizeof(unsigned int) * 8 - 1;
+    int bitsPerInt =  (sizeof(int) * 8) - 1;
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int *arr, *ans;
-    cudaMallocManaged(&arr, (long)n * sizeof(unsigned int) * taken);
-    cudaMallocManaged(&ans, (long)n * sizeof(unsigned int) * n);
-    memset(arr,0,(long)taken * n * sizeof(unsigned int));
+    int *arr, *ans;
+    cudaMallocManaged(&arr, (long)n * sizeof(int) * taken);
+    cudaMallocManaged(&ans, (long)n * sizeof(int) * n);
+    memset(arr,0,(long)taken * n * sizeof(int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
@@ -108,5 +108,6 @@ int32_t main(int argc, char** argv)
     }
     data.close();
     cudaFree(arr);
+    cudaFree(ans);
     return 0;
 }
