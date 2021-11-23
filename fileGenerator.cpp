@@ -9,13 +9,35 @@ int main(int argc, char** argv)
     output << argv[1] << '\n' << argv[2] << '\n';
     int n = atoi(argv[1]);
     int l = atoi(argv[2]);
+    int *arr = new int[n * l];
+    int nrToSwitch;
     for(int x = 0; x < n ; x++)
     {
-        for(int y = 0; y < l; y++)
+        if(x < n/2)
         {
-            output<< rand() % 2;
+            for(int y = 0; y < l; y++)
+            {
+                arr[x * l + y] = (rand() % 2);
+                output<<arr[x * l + y];
+            }
+            output<<'\n';
         }
-        output << '\n';
+        else
+        {
+            nrToSwitch = rand() % l;
+            for(int y = 0; y < l; y++)
+            {
+                if(y == nrToSwitch)
+                {
+                    output<<(1 - arr[(x - n/2) * l + y]);
+                }
+                else
+                {
+                    output<<arr[(x - n/2) * l + y];
+                }
+            }
+            output<<'\n';
+        }
     }
     output.close();
 }

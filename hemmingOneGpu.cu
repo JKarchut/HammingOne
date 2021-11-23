@@ -40,14 +40,14 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 
 __global__ void findPairs(unsigned int *arr, int n, int l)
 {
-    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    long index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
     for(int x = index + 1; x < n; x++)
     {
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            pom = (arr[index * l + y]^arr[x * l + y]);
+            pom = (arr[(long)index * l + y]^arr[(long)x * l + y]);
             if(pom > 0 && (pom & (pom - 1)) == 0)
                 diff++;
             else if(pom > 0)
@@ -74,22 +74,21 @@ int32_t main(int argc, char** argv)
     if(l % bitsPerInt != 0)
         taken++;
     unsigned int* arr;
-    cudaMallocManaged(&arr, n * sizeof(unsigned int) * taken);
-    memset(arr,0,taken * n * sizeof(unsigned int));
+    cudaMallocManaged(&arr, (long)n * sizeof(unsigned int) * taken);
+    memset(arr,0,(long)taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
     while(data >> number)
     {
-        parseNumber(&arr[arrPos * taken], number, bitsPerInt);
+        parseNumber(&arr[(long)arrPos * taken], number, bitsPerInt);
         arrPos++;
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
-    cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * (n + 1));
+    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * (n + 1)));
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
     gpuErrchk( cudaPeekAtLastError() );
     gpuErrchk( cudaDeviceSynchronize() );
-    cudaDeviceSynchronize();
     data.close();
     cudaFree(arr);
     return 0;
