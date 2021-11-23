@@ -40,14 +40,14 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 
 __global__ void findPairs(unsigned int *arr, unsigned int* ans, int n, int l)
 {
-    long index = blockIdx.x * blockDim.x + threadIdx.x;
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
     for(int x = index + 1; x < n; x++)
     {
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            pom = (arr[(long)index * l + y]^arr[(long)x * l + y]);
+            pom = (arr[index * l + y]^arr[x * l + y]);
             if(pom > 0 && (pom & (pom - 1)) == 0)
                 diff++;
             else if(pom > 0)
