@@ -73,7 +73,7 @@ int32_t main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int* arr, ans;
+    unsigned int *arr, *ans;
     cudaMallocManaged(&arr, (long)n * sizeof(unsigned int) * taken);
     cudaMallocManaged(&ans, (long)n * sizeof(unsigned int) * n);
     memset(arr,0,(long)taken * n * sizeof(unsigned int));
