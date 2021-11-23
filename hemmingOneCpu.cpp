@@ -19,6 +19,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
             arrPos++;
             bitPos = 0;
             pomValue = 0;
+            x--;
         }
     }
     if(bitPos != 0)
@@ -72,6 +73,14 @@ int32_t main(int argc, char** argv)
     {
         parseNumber(&arr[arrPos * taken], number, bitsPerInt);
         arrPos++;
+    }
+    for(int x=0;x<n;x++)
+    {
+        for(int y = 0; y<taken; y++)
+        {
+            std::cout<<arr[x * taken + y]<<' ';
+        }
+        std::cout<<std::endl;
     }
     findPairs(arr,n,taken);
     data.close();

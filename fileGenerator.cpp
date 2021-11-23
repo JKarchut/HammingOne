@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     int nrToSwitch;
     for(int x = 0; x < n ; x++)
     {
-        if(x < n/2)
+        if(x < 3 * n / 4)
         {
             for(int y = 0; y < l; y++)
             {

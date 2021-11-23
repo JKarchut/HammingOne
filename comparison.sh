@@ -9,7 +9,7 @@ CPU_END_TIME=$(date +%s%N | cut -b1-13)
 
 echo "Running GPU"
 GPU_START_TIME=$(date +%s%N | cut -b1-13)
-./hemmingOneGpu test.txt > output_gpu.txt
+./hemmingOneGpu test.txt > output_gpu.txt time.txt
 GPU_END_TIME=$(date +%s%N | cut -b1-13)
 
 echo `./verify output_cpu.txt output_gpu.txt` 

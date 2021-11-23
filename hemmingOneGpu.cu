@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <chrono>
+
+using std::chrono;
 
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -38,7 +41,7 @@ void parseNumber(int *arr, std::string number, int bitsPerInt)
     }
 }
 
-__global__ void findPairs(int *arr, int* ans, int n, int l)
+__global__ void findPairs(int *arr, int n, int l)
 {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
@@ -63,7 +66,7 @@ __global__ void findPairs(int *arr, int* ans, int n, int l)
         }
         if(diff == 1)
         {
-            ans[index * n + x] = 1;
+            printf("%d %d\n",index,x);
         }
     }
 }
@@ -71,6 +74,7 @@ __global__ void findPairs(int *arr, int* ans, int n, int l)
 int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
+    std::ofstream measures(argv[2]);
     int n;
     int l;
     data >> n;
@@ -81,7 +85,6 @@ int32_t main(int argc, char** argv)
         taken++;
     int *arr, *ans;
     cudaMallocManaged(&arr, (long)n * sizeof(int) * taken);
-    cudaMallocManaged(&ans, (long)n * sizeof(int) * n);
     memset(arr,0,(long)taken * n * sizeof(int));
     std::string number;
     int arrPos = 0;
@@ -93,21 +96,14 @@ int32_t main(int argc, char** argv)
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
-    findPairs<<<blockCount,threadCount>>>(arr, ans,n,taken);
-    gpuErrchk( cudaPeekAtLastError() );
-    gpuErrchk( cudaDeviceSynchronize() );
-    for(int x = 0; x< n;x++)
-    {
-        for(int y = 0; y < n; y++)
-        {
-            if(ans[x * n + y] == 1)
-            {
-                std::cout<<x<<' '<<y<<std::endl;
-            }
-        }
-    }
+    auto start = high_resolution_clock::now();
+    findPairs<<<blockCount,threadCount>>>(arr,n,taken);
+    gpuErrchk( cudaPeekAtLastError());
+    gpuErrchk( cudaDeviceSynchronize());
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    measures << duration.count() / 1e6;
     data.close();
     cudaFree(arr);
-    cudaFree(ans);
     return 0;
 }
