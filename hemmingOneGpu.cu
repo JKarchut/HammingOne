@@ -1,6 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+   if (code != cudaSuccess) 
+   {
+      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+      if (abort) exit(code);
+   }
+}
+
 void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
@@ -74,8 +85,8 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
-    cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * n);
-    findPairs<<<blockCount,threadCount>>>(arr,n,taken);
+    cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * (n + 1));
+    gpuErrchk(findPairs<<<blockCount,threadCount>>>(arr,n,taken));
     cudaDeviceSynchronize();
     data.close();
     cudaFree(arr);
