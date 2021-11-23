@@ -33,6 +33,7 @@ void parseNumber(int *arr, std::string number, int bitsPerInt)
             arrPos++;
             bitPos = 0;
             pomValue = 0;
+            x--
         }
     }
     if(bitPos != 0)
