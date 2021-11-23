@@ -37,7 +37,8 @@ __global__ void findPairs(  int *arr, int n, int l)
         diff = 0;
         for(int y = 0; y < l; y++)
         {
-            pom = (arr[id * l + y]^arr[x * l + y]);    
+            pom = 0;
+            pom = (arr[(id * l) + y]^arr[(x * l) + y]);    
             while(pom != 0)
             {
                 diff += (pom & 1);
@@ -76,7 +77,7 @@ int main(int argc, char** argv)
         parseNumber(&arr[taken * arrPos], number, bitsPerInt);
         arrPos++;
     }
-
+    printf("%d %d\n",n,taken);
     int* arr_d;
     cudaMalloc(&arr_d, n * taken * sizeof(int));
     cudaMemcpy(arr_d,arr, n * taken * sizeof(int), cudaMemcpyHostToDevice);
