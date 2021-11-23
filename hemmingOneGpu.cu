@@ -63,7 +63,7 @@ int32_t main(int argc, char** argv)
     if(l % bitsPerInt != 0)
         taken++;
     unsigned int* arr;
-    cudaMallocManaged(&arr, n*sizeof(unsigned int) * taken);
+    cudaMallocManaged(&arr, n * sizeof(unsigned int) * taken);
     memset(arr,0,taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
@@ -74,6 +74,7 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
+    cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * n);
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
     cudaDeviceSynchronize();
     data.close();
