@@ -31,7 +31,7 @@ void parseNumber(int *arr, std::string number, int bitsPerInt)
             arrPos++;
             bitPos = 0;
             pomValue = 0;
-            x--
+            x--;
         }
     }
     if(bitPos != 0)
@@ -82,7 +82,7 @@ int32_t main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    int *arr, *ans;
+    int *arr;
     cudaMallocManaged(&arr, (long)n * sizeof(int) * taken);
     memset(arr,0,(long)taken * n * sizeof(int));
     std::string number;
