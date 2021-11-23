@@ -38,7 +38,7 @@ void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
     }
 }
 
-__global__ void findPairs(unsigned int *arr, int n, int l)
+__global__ void findPairs(unsigned int *arr, unsigned int* ans, int n, int l)
 {
     long index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
@@ -57,7 +57,7 @@ __global__ void findPairs(unsigned int *arr, int n, int l)
         }
         if(diff == 1)
         {
-            printf("%d %d\n",index,x);
+            ans[index * n + x] = 1;
         }
     }
 }
@@ -73,8 +73,9 @@ int32_t main(int argc, char** argv)
     int taken = l / bitsPerInt;
     if(l % bitsPerInt != 0)
         taken++;
-    unsigned int* arr;
+    unsigned int* arr, ans;
     cudaMallocManaged(&arr, (long)n * sizeof(unsigned int) * taken);
+    cudaMallocManaged(&ans, (long)n * sizeof(unsigned int) * n);
     memset(arr,0,(long)taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
@@ -86,9 +87,19 @@ int32_t main(int argc, char** argv)
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, sizeof(unsigned int) * n * (n + 1)));
-    findPairs<<<blockCount,threadCount>>>(arr,n,taken);
+    findPairs<<<blockCount,threadCount>>>(arr, ans,n,taken);
     gpuErrchk( cudaPeekAtLastError() );
     gpuErrchk( cudaDeviceSynchronize() );
+    for(int x = 0; x< n;x++)
+    {
+        for(int y = 0; y < n; y++)
+        {
+            if(ans[x * n + y] == 1)
+            {
+                std::cout<<x<<' '<<y<<std::endl;
+            }
+        }
+    }
     data.close();
     cudaFree(arr);
     return 0;
