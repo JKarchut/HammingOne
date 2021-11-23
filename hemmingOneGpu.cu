@@ -92,7 +92,7 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
-    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, 1e15));
+    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     findPairs<<<blockCount,threadCount>>>(arr, ans,n,taken);
     gpuErrchk( cudaPeekAtLastError() );
     gpuErrchk( cudaDeviceSynchronize() );
