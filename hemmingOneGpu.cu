@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include <sys/time.h>
 
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -94,17 +93,11 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
+    std::cout<<"works"<<std::endl;
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
-    struct timeval begin, end;
-    gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
     gpuErrchk( cudaPeekAtLastError());
     gpuErrchk( cudaDeviceSynchronize());
-    gettimeofday(&end, 0);
-   long seconds = end.tv_sec - begin.tv_sec;
-    long microseconds = end.tv_usec - begin.tv_usec;
-    double elapsed = seconds + microseconds*1e-6;
-    measures << elapsed;
     data.close();
     cudaFree(arr);
     return 0;
