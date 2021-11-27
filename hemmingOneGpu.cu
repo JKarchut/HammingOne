@@ -101,8 +101,8 @@ int32_t main(int argc, char** argv)
     gettimeofday(&end, 0);
     long seconds = end.tv_sec - begin.tv_sec;
     long microseconds = end.tv_usec - begin.tv_usec;
-    double elapsed = seconds + microseconds*1e-6;
-    measures <<"GPU " << elapsed << "s " << std::endl;
+    double elapsed =  (seconds + microseconds*1e-6) * 1000;
+    measures <<"GPU " << elapsed << "ms " << std::endl;
     gpuErrchk( cudaPeekAtLastError());
     gpuErrchk( cudaDeviceSynchronize());
     data.close();
