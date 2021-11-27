@@ -65,6 +65,7 @@ double GetElapsed(struct timeval begin, struct timeval end)
 
 int32_t main(int argc, char** argv)
 {
+    if(arc < 3) return -1;
     std::ifstream data(argv[1]);
     std::ofstream measures(argv[2], std::ios::app);
     struct timeval begin, end;
@@ -87,7 +88,7 @@ int32_t main(int argc, char** argv)
         arrPos++;
     }
     gettimeofday(&end, 0);
-    measures <<"CPU read data" << GetElapsed(begin,end) << "ms " << std::endl;
+    measures <<"CPU read data: " << GetElapsed(begin,end) << "ms " << std::endl;
     
     gettimeofday(&begin, 0);
     findPairs(arr,n,taken);

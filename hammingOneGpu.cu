@@ -81,6 +81,7 @@ int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
     std::ofstream measures(argv[2], std::ios::app);
+    if(arc < 3) return -1;
     struct timeval begin, end;
     int n;
     int l;
@@ -117,11 +118,10 @@ int32_t main(int argc, char** argv)
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr_d,n,taken);
-    gettimeofday(&end, 0);
-    measures <<"GPU algorithm: " << GetElapsed(begin,end) << "ms " << std::endl;
-    
     gpuErrchk( cudaPeekAtLastError());
     gpuErrchk( cudaDeviceSynchronize());
+    gettimeofday(&end, 0);
+    measures <<"GPU algorithm: " << GetElapsed(begin,end) << "ms " << std::endl;
     data.close();
     measures.close();
     cudaFree(arr_d);

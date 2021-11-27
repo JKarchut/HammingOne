@@ -5,12 +5,12 @@ echo "dataset 100k vectors of 1000 long" >> time.txt
 
 echo "CPU"
 CPU_START_TIME=$(date +%s%N | cut -b1-13)
-./hemmingOneCpu test.txt > output_cpu.txt time.txt
+./hammingOneCpu test.txt > output_cpu.txt time.txt
 CPU_END_TIME=$(date +%s%N | cut -b1-13)
 
 echo "GPU"
 GPU_START_TIME=$(date +%s%N | cut -b1-13)
-./hemmingOneGpu test.txt > output_gpu.txt time.txt
+./hammingOneGpu test.txt > output_gpu.txt time.txt
 GPU_END_TIME=$(date +%s%N | cut -b1-13)
 
 echo `./verify output_cpu.txt output_gpu.txt` >> time.txt
