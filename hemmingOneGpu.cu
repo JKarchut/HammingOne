@@ -70,6 +70,13 @@ __global__ void findPairs(int *arr, int n, int l)
     }
 }
 
+double GetElapsed(struct timeval begin, struct timeval end)
+{
+    long seconds = end.tv_sec - begin.tv_sec;
+    long microseconds = end.tv_usec - begin.tv_usec;
+    return (seconds + microseconds*1e-6) * 1000;
+}
+
 int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
@@ -88,24 +95,30 @@ int32_t main(int argc, char** argv)
     memset(arr,0,(long)taken * n * sizeof(int));
     std::string number;
     int arrPos = 0;
+    gettimeofday(&begin, 0);
     while(data >> number)
     {
         parseNumber(&arr[(long)arrPos * taken], number, bitsPerInt);
         arrPos++;
     }
+    gettimeofday(&end, 0);
+    
+    measures <<"GPU read data: " << GetElapsed(begin,end) << "ms " << std::endl;
+    
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
     int *arr_d;
+    gettimeofday(&begin, 0);
     gpuErrchk(cudaMalloc(&arr_d, (long)taken * n * sizeof(int)));
     gpuErrchk(cudaMemcpy(arr_d, arr, (long)taken * n * sizeof(int), cudaMemcpyHostToDevice));
-    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
+    gettimeofday(&end, 0);
+    measures <<"GPU alloc and copy to device: " << GetElapsed(begin,end) << "ms " << std::endl;
+    
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr_d,n,taken);
     gettimeofday(&end, 0);
-    long seconds = end.tv_sec - begin.tv_sec;
-    long microseconds = end.tv_usec - begin.tv_usec;
-    double elapsed =  (seconds + microseconds*1e-6) * 1000;
-    measures <<"GPU " << elapsed << "ms " << std::endl;
+    measures <<"GPU algorithm: " << GetElapsed(begin,end) << "ms " << std::endl;
+    
     gpuErrchk( cudaPeekAtLastError());
     gpuErrchk( cudaDeviceSynchronize());
     data.close();

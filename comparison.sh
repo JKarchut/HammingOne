@@ -17,5 +17,5 @@ echo `./verify output_cpu.txt output_gpu.txt` >> time.txt
 
 make clean
 
-echo "CPU calculations took $(($CPU_END_TIME - $CPU_START_TIME)) in total ms" >> time.txt
-echo "GPU calculations took $(($GPU_END_TIME - $GPU_START_TIME)) in total ms" >> time.txt
+echo "CPU total $(($CPU_END_TIME - $CPU_START_TIME)) ms" >> time.txt
+echo "GPU total $(($GPU_END_TIME - $GPU_START_TIME)) ms" >> time.txt

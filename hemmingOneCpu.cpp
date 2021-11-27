@@ -56,6 +56,13 @@ void findPairs(unsigned int *arr, int64_t n, int l)
     }
 }
 
+double GetElapsed(struct timeval begin, struct timeval end)
+{
+    long seconds = end.tv_sec - begin.tv_sec;
+    long microseconds = end.tv_usec - begin.tv_usec;
+    return (seconds + microseconds*1e-6) * 1000;
+}
+
 int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
@@ -73,18 +80,19 @@ int32_t main(int argc, char** argv)
     memset(arr,0,taken * n * sizeof(unsigned int));
     std::string number;
     int arrPos = 0;
+    gettimeofday(&begin, 0);
     while(data >> number)
     {
         parseNumber(&arr[arrPos * taken], number, bitsPerInt);
         arrPos++;
     }
+    gettimeofday(&end, 0);
+    measures <<"CPU read data" << GetElapsed(begin,end) << "ms " << std::endl;
+    
     gettimeofday(&begin, 0);
     findPairs(arr,n,taken);
     gettimeofday(&end, 0);
-    long seconds = end.tv_sec - begin.tv_sec;
-    long microseconds = end.tv_usec - begin.tv_usec;
-    double elapsed = (seconds + microseconds*1e-6) * 1000;
-    measures <<"CPU " << elapsed << "ms " << std::endl;
+    measures <<"CPU algorithm: " << GetElapsed(begin,end) << "ms " << std::endl;
     data.close();
     measures.close();
     delete[] arr;
