@@ -1,13 +1,14 @@
+echo "--- TEST ---" >> time.txt
+
 make
-echo "Testing for 100000 vectors of 1000 length"
-./fileGenerator 100000 1000 test.txt
+echo "dataset 100k vectors of 1000 long" >> time.txt
 
 echo "CPU"
 CPU_START_TIME=$(date +%s%N | cut -b1-13)
 ./hemmingOneCpu test.txt > output_cpu.txt time.txt
 CPU_END_TIME=$(date +%s%N | cut -b1-13)
 
-echo "Running GPU"
+echo "GPU"
 GPU_START_TIME=$(date +%s%N | cut -b1-13)
 ./hemmingOneGpu test.txt > output_gpu.txt time.txt
 GPU_END_TIME=$(date +%s%N | cut -b1-13)
