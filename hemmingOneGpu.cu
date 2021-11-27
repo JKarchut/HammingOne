@@ -95,7 +95,6 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
-    std::cout<<"works"<<std::endl;
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
