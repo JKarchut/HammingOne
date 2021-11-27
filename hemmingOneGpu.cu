@@ -42,9 +42,9 @@ void parseNumber(int *arr, std::string number, int bitsPerInt)
 
 __global__ void findPairs(int *arr, int n, int l)
 {
-    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    long index = blockIdx.x * blockDim.x + threadIdx.x;
     int diff, pom;
-    for(int x = index + 1; x < n; x++)
+    for(long x = index + 1; x < n; x++)
     {
         diff = 0;
         for(int y = 0; y < l; y++)
@@ -65,7 +65,7 @@ __global__ void findPairs(int *arr, int n, int l)
         }
         if(diff == 1)
         {
-            printf("%d %d\n",index,x);
+            printf("%ld %ld\n",index,x);
         }
     }
 }
