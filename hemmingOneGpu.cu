@@ -97,7 +97,7 @@ int32_t main(int argc, char** argv)
     int blockCount = (n / 1024) + 1;
     int *arr_d;
     gpuErrchk(cudaMalloc(&arr_d, (long)n * sizeof(int) * taken));
-    gpuErrchk(cudaMemcpy(arr_d,arr,taken * n * sizeof(int), cudaMemcpyHostToDevice));
+    gpuErrchk(cudaMemcpy(arr_d, arr, (long)taken * n * sizeof(int), cudaMemcpyHostToDevice));
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
@@ -110,6 +110,7 @@ int32_t main(int argc, char** argv)
     gpuErrchk( cudaDeviceSynchronize());
     data.close();
     measures.close();
-    cudaFree(arr);
+    cudaFree(arr_d);
+    delete[] arr;
     return 0;
 }

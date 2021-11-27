@@ -4,7 +4,7 @@ echo "Testing for 100000 vectors of 1000 length"
 
 echo "CPU"
 CPU_START_TIME=$(date +%s%N | cut -b1-13)
-./brute test.txt > output_cpu.txt time.txt
+./hemmingOneCpu test.txt > output_cpu.txt time.txt
 CPU_END_TIME=$(date +%s%N | cut -b1-13)
 
 echo "Running GPU"
