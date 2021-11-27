@@ -65,7 +65,7 @@ double GetElapsed(struct timeval begin, struct timeval end)
 
 int32_t main(int argc, char** argv)
 {
-    if(arc < 3) return -1;
+    if(argc < 3) return -1;
     std::ifstream data(argv[1]);
     std::ofstream measures(argv[2], std::ios::app);
     struct timeval begin, end;

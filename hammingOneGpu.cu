@@ -81,7 +81,7 @@ int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
     std::ofstream measures(argv[2], std::ios::app);
-    if(arc < 3) return -1;
+    if(argc < 3) return -1;
     struct timeval begin, end;
     int n;
     int l;
