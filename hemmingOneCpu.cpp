@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <sys/time.h>
+
 void parseNumber(unsigned int *arr, std::string number, int bitsPerInt)
 {
     int bitPos = 0;
@@ -57,6 +59,8 @@ void findPairs(unsigned int *arr, int n, int l)
 int32_t main(int argc, char** argv)
 {
     std::ifstream data(argv[1]);
+    std::ofstream measures(argv[2], std::ios::app);
+    struct timeval begin, end;
     int n;
     int l;
     data >> n;
@@ -74,15 +78,14 @@ int32_t main(int argc, char** argv)
         parseNumber(&arr[arrPos * taken], number, bitsPerInt);
         arrPos++;
     }
-    for(int x=0;x<n;x++)
-    {
-        for(int y = 0; y<taken; y++)
-        {
-            std::cout<<arr[x * taken + y]<<' ';
-        }
-        std::cout<<std::endl;
-    }
+    gettimeofday(&begin, 0);
     findPairs(arr,n,taken);
+    gettimeofday(&end, 0);
+    long seconds = end.tv_sec - begin.tv_sec;
+    long microseconds = end.tv_usec - begin.tv_usec;
+    double elapsed = seconds + microseconds*1e-6;
+    measures <<"CPU " << elapsed << "s " << std::endl;
     data.close();
+    measure.close();
     delete[] arr;
 }
