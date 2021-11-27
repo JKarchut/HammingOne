@@ -96,11 +96,11 @@ int32_t main(int argc, char** argv)
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
     int *arr_d;
-    gpuErrchk(cudaMalloc(&arr_d, (long)n * sizeof(int) * taken));
+    gpuErrchk(cudaMalloc(&arr_d, (long)taken * n * sizeof(int)));
     gpuErrchk(cudaMemcpy(arr_d, arr, (long)taken * n * sizeof(int), cudaMemcpyHostToDevice));
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
-    findPairs<<<blockCount,threadCount>>>(arr,n,taken);
+    findPairs<<<blockCount,threadCount>>>(arr_d,n,taken);
     gettimeofday(&end, 0);
     long seconds = end.tv_sec - begin.tv_sec;
     long microseconds = end.tv_usec - begin.tv_usec;
