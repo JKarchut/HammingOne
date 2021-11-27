@@ -84,7 +84,7 @@ int32_t main(int argc, char** argv)
     if(l % bitsPerInt != 0)
         taken++;
     int *arr;
-    cudaMallocManaged(&arr, (long)n * sizeof(int) * taken);
+    arr = new int[taken * n];
     memset(arr,0,(long)taken * n * sizeof(int));
     std::string number;
     int arrPos = 0;
@@ -95,6 +95,9 @@ int32_t main(int argc, char** argv)
     }
     int threadCount = 1024;
     int blockCount = (n / 1024) + 1;
+    int *arr_d;
+    gpuErrchk(cudaMalloc(&arr_d, (long)n * sizeof(int) * taken));
+    gpuErrchk(cudaMemcpy(arr_d,arr,taken * n * sizeof(int), cudaMemcpyHostToDevice));
     gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr,n,taken);
