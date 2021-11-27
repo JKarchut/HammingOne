@@ -114,6 +114,7 @@ int32_t main(int argc, char** argv)
     gettimeofday(&end, 0);
     measures <<"GPU alloc and copy to device: " << GetElapsed(begin,end) << "ms " << std::endl;
     
+    gpuErrchk(cudaDeviceSetLimit(cudaLimitPrintfFifoSize, (long long)1e15));
     gettimeofday(&begin, 0);
     findPairs<<<blockCount,threadCount>>>(arr_d,n,taken);
     gettimeofday(&end, 0);
