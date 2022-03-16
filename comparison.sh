@@ -3,7 +3,7 @@ echo "--- TEST ---" >> time.txt
 
 make
 echo "dataset 100k vectors of 1000 long" >> time.txt
-
+./fileGenerator 100000 1000
 echo "--- CPU ---" >> time.txt
 echo "CPU"
 CPU_START_TIME=$(date +%s%N | cut -b1-13)
